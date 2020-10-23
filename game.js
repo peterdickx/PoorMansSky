@@ -119,7 +119,7 @@ function draw() {
         let y = height - Noise.perlinNoise(xPosition + i / zoom) * height;
 
         //grass
-        context.strokeStyle = Utils.hsl(120, 100, 50);
+        context.strokeStyle = Utils.hsl(120, 50, 35);
         Utils.drawLine(i, y, i, height);
 
         let waterline = quarter * 3;
