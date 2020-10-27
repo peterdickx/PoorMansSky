@@ -48,7 +48,7 @@ let xPosition;
 let zoom = 300;
 
 let frameCount = 0;
-let isPlaying = false;
+let isPlaying = true;
 let isFirstTime = true;
 
 let iExplosion = 1;
@@ -59,8 +59,8 @@ draw();
 function setup() {
     quarter = height / 4;
     middle = width / 2;
-    shipWidth = width / 25;
-    shipHeight = height / 25;
+    shipWidth = 50;
+    shipHeight = 40;
     xPosition = Utils.randomNumber(0, 10000);
     context.fillStyle = "red";
     context.textAlign = "center";
@@ -120,21 +120,23 @@ function touch(eventData) {
     eventData.preventDefault();
     if (eventData.touches.length >= 1) {
         reset();
-        if (eventData.touches[0].pageX > width / 2) {
+        let touchX = eventData.touches[0].pageX;
+        let touchY = eventData.touches[0].pageY;
+        if (Utils.calculateDistance(touchX, touchY, width - 35, height - 100) < 35) {
             if (xSpeed < xMaxSpeed) {
                 xSpeed += 0.005;
             }
-        } else {
+        } else if (Utils.calculateDistance(touchX, touchY, width - 135, height - 100) < 35) {
             if (xSpeed > -xMaxSpeed) {
                 xSpeed -= 0.005;
             }
         }
 
-        if (eventData.touches[0].pageY > height / 2) {
+        if (Utils.calculateDistance(touchX, touchY, width - 85, height - 150) < 35) {
             if (ySpeed < yMaxSpeed) {
                 ySpeed += 1;
             }
-        } else {
+        } else if (Utils.calculateDistance(touchX, touchY, width - 85, height - 50) < 35) {
             if (ySpeed > -yMaxSpeed) {
                 ySpeed -= 1;
             }
@@ -210,6 +212,18 @@ function draw() {
         Utils.fillTriangle(middle + (shipWidth / 2 + 5) * -xDirection, shipY - shipHeight / 4, middle + (shipWidth + shipWidth / 4) * -xDirection, shipY, middle + (shipWidth / 2 + 5) * -xDirection, shipY + shipHeight / 4);
         context.fillStyle = Utils.hsl(0, 100, 50);
         Utils.fillTriangle(middle - shipWidth / 2 * xDirection, shipY - shipHeight / 2, middle + shipWidth / 2 * xDirection, shipY, middle - shipWidth / 2 * xDirection, shipY + shipHeight / 2);
+
+        //UI
+        context.fillStyle = "darkblue";
+        Utils.fillCircle(width - 35, height - 100, 35);
+        Utils.fillCircle(width - 85, height - 150, 35);
+        Utils.fillCircle(width - 85, height - 50, 35);
+        Utils.fillCircle(width - 135, height - 100, 35);
+        context.fillStyle = "white";
+        Utils.fillTriangle(width - 60, height - 135, width - 110, height - 135, width - 85, height - 180);
+        Utils.fillTriangle(width - 50, height - 75, width - 50, height - 125, width - 5, height - 100);
+        Utils.fillTriangle(width - 60, height - 65, width - 110, height - 65, width - 85, height - 20);
+        Utils.fillTriangle(width - 120, height - 75, width - 120, height - 125, width - 165, height - 100);
     } else if (isFirstTime) {
         context.fillStyle = "black";
         context.fillRect(0, 0, width, height);
