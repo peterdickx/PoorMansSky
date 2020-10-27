@@ -28,6 +28,8 @@ import * as Noise from "./scripts/noise.js";
 
 window.onkeydown = keyPressed;
 
+window.onmousedown = mouseDown;
+
 let width = context.canvas.width;
 let height = context.canvas.height;
 
@@ -71,9 +73,8 @@ function setup() {
  * @param {KeyboardEvent} eventData 
  */
 function keyPressed(eventData) {
-
-    if (!isPlaying) {
-        if (eventData.code == "Space") {
+    if (eventData.code == "Space") {
+        if (!isPlaying) {
             isPlaying = true;
             isFirstTime = false;
             shipY = 50;
@@ -98,6 +99,26 @@ function keyPressed(eventData) {
         if (ySpeed < yMaxSpeed) {
             ySpeed += 1;
         }
+    }
+}
+
+function reset() {
+    if (!isPlaying) {
+        isPlaying = true;
+        isFirstTime = false;
+        shipY = 50;
+        xPosition = Utils.randomNumber(0, 10000);
+        iExplosion = 0;
+    }
+}
+
+/**
+ * 
+ * @param {MouseEvent} eventData 
+ */
+function mouseDown(eventData) {
+    if (eventData.button == 0) {
+        reset();
     }
 }
 
