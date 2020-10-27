@@ -28,7 +28,7 @@ import * as Noise from "./scripts/noise.js";
 
 window.onkeydown = keyPressed;
 
-window.onmousedown = mouseDown;
+window.ontouchstart = touch;
 
 let width = context.canvas.width;
 let height = context.canvas.height;
@@ -114,11 +114,31 @@ function reset() {
 
 /**
  * 
- * @param {MouseEvent} eventData 
+ * @param {TouchEvent} eventData 
  */
-function mouseDown(eventData) {
-    if (eventData.button == 0) {
+function touch(eventData) {
+    eventData.preventDefault();
+    if (eventData.touches.length >= 1) {
         reset();
+        if (eventData.touches[0].pageX > width / 2) {
+            if (xSpeed < xMaxSpeed) {
+                xSpeed += 0.005;
+            }
+        } else {
+            if (xSpeed > -xMaxSpeed) {
+                xSpeed -= 0.005;
+            }
+        }
+
+        if (eventData.touches[0].pageY > height / 2) {
+            if (ySpeed < yMaxSpeed) {
+                ySpeed += 1;
+            }
+        } else {
+            if (ySpeed > -yMaxSpeed) {
+                ySpeed -= 1;
+            }
+        }
     }
 }
 
