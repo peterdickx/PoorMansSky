@@ -29,6 +29,7 @@ import * as Noise from "./scripts/noise.js";
 window.onkeydown = keyPressed;
 
 window.ontouchstart = touch;
+window.ontouchend = touchEnd;
 
 window.mobileAndTabletCheck = function () {
     let check = false;
@@ -60,6 +61,11 @@ let isPlaying = true;
 let isFirstTime = true;
 
 let iExplosion = 1;
+
+let leftIsTouched = false;
+let rightIsTouched = false;
+let upIsTouched = false;
+let downIsTouched = false;
 
 setup();
 draw();
@@ -131,28 +137,55 @@ function touch(eventData) {
         let touchX = eventData.touches[0].pageX;
         let touchY = eventData.touches[0].pageY;
         if (Utils.calculateDistance(touchX, touchY, width - 50, height - 125) < 35) {
-            if (xSpeed < xMaxSpeed) {
-                xSpeed += 0.005;
-            }
+            leftIsTouched = true;
         } else if (Utils.calculateDistance(touchX, touchY, width - 200, height - 125) < 35) {
-            if (xSpeed > -xMaxSpeed) {
-                xSpeed -= 0.005;
-            }
+            rightIsTouched = true;
         }
-
         if (Utils.calculateDistance(touchX, touchY, width - 125, height - 50) < 35) {
-            if (ySpeed < yMaxSpeed) {
-                ySpeed += 1;
-            }
+            downIsTouched = true;
         } else if (Utils.calculateDistance(touchX, touchY, width - 125, height - 200) < 35) {
-            if (ySpeed > -yMaxSpeed) {
-                ySpeed -= 1;
-            }
+            upIsTouched = true;
         }
     }
 }
 
+/**
+ * 
+ * @param {TouchEvent} eventData 
+ */
+function touchEnd(eventData) {
+    leftIsTouched = false;
+    rightIsTouched = false;
+    upIsTouched = false;
+    downIsTouched = false;
+}
+
 function draw() {
+
+    if (rightIsTouched) {
+        if (xSpeed > -xMaxSpeed) {
+            xSpeed -= 0.005;
+        }
+    }
+
+    if (leftIsTouched) {
+        if (xSpeed < xMaxSpeed) {
+            xSpeed += 0.005;
+        }
+    }
+
+    if (upIsTouched) {
+        if (ySpeed > -yMaxSpeed) {
+            ySpeed -= 1;
+        }
+    }
+
+    if (downIsTouched) {
+        if (ySpeed < yMaxSpeed) {
+            ySpeed += 1;
+        }
+    }
+
     frameCount++;
     context.fillStyle = Utils.hsl(200, 70, 50);
     context.fillRect(0, 0, width, height);
